@@ -1,21 +1,26 @@
-import React, { createContext, ReactNode, useContext } from "react";
+import React, { createContext, ReactNode } from "react";
 import axiosInstance from "../services/api";
 import AuthService from "../services/authService";
 import { AuthContextType, LoginType, RegisterType } from "../interfaces";
-
+import { useNavigate } from "react-router-dom";
 const authService = new AuthService();
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const AuthContext = createContext<AuthContextType>({
+  login: async () => {},
+  logout: () => {},
+  register: async () => {},
+});
 
 const AuthContextProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
+  const navigate = useNavigate();
   const login = async (data: LoginType) => {
     try {
       const { accessToken } = await authService.login(data);
-      localStorage.setItem("token", accessToken);
       axiosInstance.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
-      console.log(accessToken);
+      localStorage.setItem("token", accessToken);
+      navigate("/private");
     } catch (error) {
       console.log(error);
     }
@@ -26,6 +31,7 @@ const AuthContextProvider: React.FC<{ children: ReactNode }> = ({
       await authService.logout();
       localStorage.removeItem("token");
       axiosInstance.defaults.headers.common.Authorization = null;
+      navigate("/login");
     } catch (error) {
       console.log(error);
     }
@@ -35,9 +41,10 @@ const AuthContextProvider: React.FC<{ children: ReactNode }> = ({
     try {
       const response = await authService.register(data);
       console.log(response);
+      navigate("/login");
     } catch (error: any) {
       if (error.response.status === 409) {
-        throw new Error(error.response.data.msg);
+        throw new Error(error.response.data.message);
       }
       console.log(error);
     }
