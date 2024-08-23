@@ -6,6 +6,7 @@ import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
 import { AuthContextProvider } from "./contexts/AuthContext";
 import ErrorPage from "./components/ErrorPage";
 import Home from "./components/Home";
+import GoogleCallback from "./components/GoogleCallback";
 
 const Auth: React.FC = () => {
   return (
@@ -29,6 +30,10 @@ const routes = [
       {
         path: "/login",
         element: <Login />,
+      },
+      {
+        path: "/google/callback",
+        element: <GoogleCallback />,
       },
       {
         path: "/register",

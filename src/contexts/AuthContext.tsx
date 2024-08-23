@@ -1,7 +1,7 @@
 import React, { createContext, ReactNode } from "react";
 import axiosInstance from "../services/api";
 import AuthService from "../services/authService";
-import { AuthContextType, LoginType, RegisterType } from "../interfaces";
+import { AuthContextType, LoginType, RegisterType } from "../types";
 import { useNavigate } from "react-router-dom";
 const authService = new AuthService();
 

@@ -1,7 +1,8 @@
 import React from "react";
 import { useAuth } from "../hooks/useAuth";
-import { LoginType } from "../interfaces";
+import { LoginType } from "../types";
 import { Navigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
 const Login: React.FC = () => {
   const { login } = useAuth();
@@ -18,10 +19,21 @@ const Login: React.FC = () => {
 
     await login(data);
   };
+
+  const handleGoogleLogin = () => {
+    // Redirect ke backend untuk memulai proses login dengan Google
+    window.location.href = "http://localhost:5000/google";
+  };
   return (
-    <button type="button" onClick={handleSubmit}>
-      Klik Disini
-    </button>
+    <>
+      <button type="button" onClick={handleSubmit}>
+        Klik Disini
+      </button>
+
+      <Button>Click Me</Button>
+
+      <button onClick={handleGoogleLogin}>Login Googel</button>
+    </>
   );
 };
 

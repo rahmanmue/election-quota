@@ -1,6 +1,6 @@
 import React from "react";
 import { useAuth } from "../hooks/useAuth";
-import { RegisterType } from "../interfaces";
+import { RegisterType } from "../types";
 
 const Register: React.FC = () => {
   const { register } = useAuth();
