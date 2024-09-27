@@ -1,5 +1,21 @@
 import axiosInstance from "./api";
-import { Token, LoginType, RegisterType } from "../types";
+
+interface LoginType {
+  email: string;
+  password: string;
+}
+
+interface RegisterType {
+  name: string;
+  email: string;
+  password: string;
+  confPassword: string;
+  role?: string;
+}
+
+interface Token {
+  accessToken: string;
+}
 
 export default class AuthService {
   async login(data: LoginType): Promise<Token> {
