@@ -1,42 +1,65 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+html {
+  scroll-behavior: smooth;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+/* HeroCards background shadow */
+.shadow-hero {
+  position: absolute;
+  background: hsl(var(--primary) / 0%);
+  border-radius: 24px;
+  rotate: 35deg;
+
+  width: 260px;
+  top: 200px;
+  height: 400px;
+  filter: blur(150px);
+  animation: shadow-slide infinite 4s linear alternate;
 }
 
-@keyframes logo-spin {
+@keyframes shadow-slide {
   from {
-    transform: rotate(0deg);
+    background: hsl(var(--primary) / 20%);
+    right: 460px;
   }
   to {
-    transform: rotate(360deg);
+    background: hsl(var(--primary) / 80%);
+    right: 160px;
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
+@media (max-width: 1024px) {
+  .shadow-hero {
+    top: 70px;
+  }
+
+  @keyframes shadow-slide {
+    from {
+      background: hsl(var(--primary) / 20%);
+      right: 460px;
+    }
+    to {
+      background: hsl(var(--primary) / 50%);
+      right: 160px;
+    }
   }
 }
 
-.card {
-  padding: 2em;
-}
+@media (max-width: 768px) {
+  .shadow-hero {
+    top: 70px;
+    width: 100px;
+    height: 350px;
+    filter: blur(60px);
+  }
 
-.read-the-docs {
-  color: #888;
+  @keyframes shadow-slide {
+    from {
+      background: hsl(var(--primary) / 20%);
+      right: 280px;
+    }
+    to {
+      background: hsl(var(--primary) / 30%);
+      right: 100px;
+    }
+  }
 }
