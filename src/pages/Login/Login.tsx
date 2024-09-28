@@ -15,11 +15,10 @@ import { Label } from "@/components/ui/label";
 import { Navbar } from "@/components/landing-page/Navbar";
 import google from "@/assets/google.png";
 import { ForgetPasswordModal } from "./ForgetPasswordModal";
+import AuthService from "@/services/authService";
+import { LoginType } from "@/services/authService";
 
-interface LoginType {
-  email: string;
-  password: string;
-}
+const authSevice = new AuthService();
 
 const Login: React.FC = () => {
   const { login, isAuthenticated } = useAuth();
@@ -40,7 +39,7 @@ const Login: React.FC = () => {
 
   const handleGoogleLogin = () => {
     // Redirect ke backend untuk memulai proses login dengan Google
-    window.location.href = "http://localhost:5000/google";
+    window.location.href = authSevice.googleLogin();
   };
   return (
     <>
@@ -95,8 +94,14 @@ const Login: React.FC = () => {
             </CardContent>
             <CardFooter>
               <div className="flex flex-col gap-2 w-full">
-                <Button className="w-full">Sign In</Button>
-                <Button variant={"outline"} className="flex items-center gap-3">
+                <Button className="w-full" onClick={handleSubmit}>
+                  Sign In
+                </Button>
+                <Button
+                  variant={"outline"}
+                  onClick={handleGoogleLogin}
+                  className="flex items-center gap-3"
+                >
                   <img src={google} alt="google-icon" className="w-5" />
                   Sign In With Google
                 </Button>

@@ -1,72 +1,73 @@
 import { Layout } from "@/components/admin-panel/Layout";
 import { Button } from "@/components/ui/button";
-import { useParams } from "react-router-dom";
-import { FilePlus2, Printer } from "lucide-react";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
+import { Link, useParams } from "react-router-dom";
+import { Printer } from "lucide-react";
+import { useEffect, useState } from "react";
+import DapilService from "@/services/dapilService";
+import ParpolVoteService, {
+  ParpolVoteType,
+} from "@/services/parpolVoteService";
+
+const dapilService = new DapilService();
+const parpolVoteService = new ParpolVoteService();
+
+interface ResponseDapil {
+  title: string;
+  value: string | number;
+}
 
 const DapilHasilSuara = () => {
   const { id } = useParams();
-  const isEmpty = id;
-  const detailDapil = [
-    {
-      title: "Daerah Pemilihan",
-      value: "daerah_pemilihan",
-    },
-    {
-      title: "[Kabupaten/Kota]",
-      value: "kabupaten_kota",
-    },
-    {
-      title: "Provinsi",
-      value: "provinsi",
-    },
-    {
-      title: "Tahun",
-      value: "tahun",
-    },
-    {
-      title: "Alokasi Kursi",
-      value: "alokasi_kursi",
-    },
-  ];
+  const [dapil, sDapil] = useState<ResponseDapil[]>([]);
+  const [pV, spV] = useState<any[]>([]);
+
+  const getDapilById = async (id: string) => {
+    const { data } = await dapilService.getById(id!);
+
+    sDapil([
+      {
+        title: "Daerah Pemilihan" as string,
+        value: data.daerah_pemilihan,
+      },
+      {
+        title: "[Kabupaten/Kota]",
+        value: data.kabupaten_kota,
+      },
+      {
+        title: "Provinsi",
+        value: data.provinsi,
+      },
+      {
+        title: "Tahun",
+        value: data.tahun,
+      },
+      {
+        title: "Alokasi Kursi",
+        value: data.alokasi_kursi,
+      },
+    ]);
+  };
+
+  const getParpolVote = async (id: string) => {
+    const { data } = await parpolVoteService.getParpolVoteByDapil(id);
+    spV(data);
+  };
+
+  useEffect(() => {
+    getDapilById(id!);
+    getParpolVote(id!);
+  }, [id]);
+
   return (
     <Layout title="Hasil Suara">
       <div className="flex gap-2 flex-wrap">
-        <Button>Tambah Data</Button>
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button variant="outline">
-              <FilePlus2 />
-              <span className="ml-2">Tambah Via Dokumen</span>
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-[425px]">
-            <DialogHeader>
-              <DialogTitle>Upload Dokumen</DialogTitle>
-              <DialogDescription>
-                Download template dokumen ini lalu upload kembali dengan data
-                yang sudah terisi.
-              </DialogDescription>
-            </DialogHeader>
-            <div className="py-2">
-              <Input type="file" />
-            </div>
+        <Button disabled={pV.length != 0}>
+          <Link to={`/daerah-pemilihan/tambah-suara/${id}`}>Tambah Data</Link>
+        </Button>
 
-            <DialogFooter>
-              <Button type="submit">Save changes</Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
-        <Button disabled={isEmpty != ""}>EDIT</Button>
+        <Button disabled={pV.length == 0}>
+          <Link to={`/daerah-pemilihan/edit-suara/${id}`}>EDIT</Link>
+        </Button>
         <Button variant="ghost">
           <Printer />
           <span className="ml-2">Cetak</span>
@@ -74,8 +75,8 @@ const DapilHasilSuara = () => {
       </div>
 
       <table className="mt-5">
-        {detailDapil.map((item) => (
-          <tr>
+        {dapil?.map((item, i) => (
+          <tr key={i}>
             <td>{item.title}</td>
             <td className="px-4">:</td>
             <td>{item.value}</td>
@@ -83,8 +84,8 @@ const DapilHasilSuara = () => {
         ))}
       </table>
 
-      {!isEmpty ? (
-        "Yoyo"
+      {pV.length != 0 ? (
+        "YI"
       ) : (
         <div className="flex justify-center items-center h-[50vh]">
           <h1>Data Masih Kosong</h1>

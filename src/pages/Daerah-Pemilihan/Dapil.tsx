@@ -1,7 +1,7 @@
 import { Layout } from "@/components/admin-panel/Layout";
 import { Search } from "@/components/Search";
 import { ActionModal } from "./ActionModal";
-import { CirclePlus, Pencil, NotebookTabs } from "lucide-react";
+import { CirclePlus, Pencil, NotebookTabs, RefreshCcwIcon } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -10,111 +10,128 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { PaginationTable } from "@/components/Pagination";
 import { Alert } from "@/components/Alert";
 import { Button } from "@/components/ui/button";
+import DapilService from "@/services/dapilService";
+import { PaginationTable } from "@/components/Pagination";
+import { DapilType, ResponseDapil } from "@/services/dapilService";
+import { usePagination } from "@/hooks/usePagination";
+import { useEffect } from "react";
+import { noTabel } from "@/lib/noTabel";
+import { Link } from "react-router-dom";
 
-const invoices = [
-  {
-    invoice: "INV001",
-    paymentStatus: "Paid",
-    totalAmount: "$250.00",
-    paymentMethod: "Credit Card",
-  },
-  {
-    invoice: "INV002",
-    paymentStatus: "Pending",
-    totalAmount: "$150.00",
-    paymentMethod: "PayPal",
-  },
-  {
-    invoice: "INV003",
-    paymentStatus: "Unpaid",
-    totalAmount: "$350.00",
-    paymentMethod: "Bank Transfer",
-  },
-  {
-    invoice: "INV004",
-    paymentStatus: "Paid",
-    totalAmount: "$450.00",
-    paymentMethod: "Credit Card",
-  },
-  {
-    invoice: "INV005",
-    paymentStatus: "Paid",
-    totalAmount: "$550.00",
-    paymentMethod: "PayPal",
-  },
-  {
-    invoice: "INV006",
-    paymentStatus: "Pending",
-    totalAmount: "$200.00",
-    paymentMethod: "Bank Transfer",
-  },
-  {
-    invoice: "INV007",
-    paymentStatus: "Unpaid",
-    totalAmount: "$300.00",
-    paymentMethod: "Credit Card",
-  },
-];
+const dapilService = new DapilService();
 
 const Dapil = () => {
-  const addSubmitForm = () => {
-    alert("Add");
+  const { data, page, totalPages, pageSize, setPaginationData } =
+    usePagination<DapilType>();
+
+  const getAllDapil = async () => {
+    const res = (await dapilService.getAll()) as ResponseDapil;
+    setPaginationData(res.data, res.currentPage, res.totalPages, res.pageSize);
   };
 
-  const onDelete = () => {
-    alert("Delete");
+  useEffect(() => {
+    getAllDapil();
+  }, []);
+
+  const addForm = async (data: DapilType) => {
+    // alert(JSON.stringify(data));
+    await dapilService.addDapil(data);
+    getAllDapil();
   };
 
-  const onSearch = (search: string) => {
-    alert(search);
+  const updateForm = async (data: DapilType) => {
+    await dapilService.updateDapil(data);
+    getAllDapil();
+  };
+
+  const deleteDapil = async (id: string) => {
+    await dapilService.deleteDapil(id);
+    getAllDapil();
+  };
+
+  const onSearch = async (search: string) => {
+    const res = await dapilService.searhByKeyword(search);
+    setPaginationData(res.data, res.currentPage, res.totalPages, res.pageSize);
+  };
+
+  const pagination = async (page: number) => {
+    const res = (await dapilService.getAll(page)) as ResponseDapil;
+    setPaginationData(res.data, res.currentPage, res.totalPages, res.pageSize);
   };
 
   return (
     <Layout title="Daerah Pemilihan">
       <div className="w-full flex flex-col gap-2 justify-between md:flex-row mb-5">
-        <ActionModal
-          title={"Tambah Daerah Pemilihan"}
-          icon={<CirclePlus />}
-          submitForm={addSubmitForm}
-        />
+        <div className="mx-auto md:mx-0">
+          <ActionModal
+            title={"Tambah Daerah Pemilihan"}
+            icon={<CirclePlus />}
+            submitForm={(newData, resetState) => {
+              addForm(newData);
+              resetState();
+            }}
+          />
+          <Button variant="ghost" onClick={getAllDapil}>
+            <RefreshCcwIcon />
+          </Button>
+        </div>
         <Search placeholder="Cari Daerah Pemilihan" onSearch={onSearch} />
       </div>
 
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[100px]">Invoice</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Method</TableHead>
-            <TableHead className="text-right">Amount</TableHead>
+            <TableHead className="w-[100px]">No</TableHead>
+            <TableHead>Tahun</TableHead>
+            <TableHead>Provinsi</TableHead>
+            <TableHead>Kabupaten/Kota</TableHead>
+            <TableHead>Daerah Pemilihan</TableHead>
+            <TableHead className="text-center">Alokasi Kursi</TableHead>
+            <TableHead className="text-right">Action</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {invoices.map((invoice) => (
-            <TableRow key={invoice.invoice}>
-              <TableCell className="font-medium">{invoice.invoice}</TableCell>
-              <TableCell>{invoice.paymentStatus}</TableCell>
-              <TableCell>{invoice.paymentMethod}</TableCell>
+          {data?.map((item, i) => (
+            <TableRow key={i}>
+              <TableCell className="font-medium">
+                {noTabel(i, page, pageSize)}
+              </TableCell>
+              <TableCell>{item.tahun}</TableCell>
+              <TableCell>{item.provinsi}</TableCell>
+              <TableCell>{item.kabupaten_kota}</TableCell>
+              <TableCell>{item.daerah_pemilihan}</TableCell>
+              <TableCell className="text-center font-medium">
+                {item.alokasi_kursi}
+              </TableCell>
               <TableCell className="text-right flex gap-2 justify-end">
                 <Button variant="ghost">
-                  <NotebookTabs />
+                  <Link to={`/daerah-pemilihan/${item.id}`}>
+                    <NotebookTabs />
+                  </Link>
                 </Button>
                 <ActionModal
                   title={"Edit Partai Politik"}
                   icon={<Pencil />}
-                  submitForm={addSubmitForm}
+                  initialData={item}
+                  submitForm={(updateData, resetState) => {
+                    updateForm(updateData);
+                    resetState();
+                  }}
                 />
-                <Alert onDelete={onDelete} />
+                <Alert onDelete={() => deleteDapil(item.id!)} />
               </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
 
-      <PaginationTable />
+      <PaginationTable
+        currentPage={page}
+        totalPages={totalPages}
+        onPageChange={pagination}
+      />
     </Layout>
   );
 };

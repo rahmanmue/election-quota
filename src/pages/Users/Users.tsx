@@ -105,7 +105,7 @@ const Users = () => {
         </TableBody>
       </Table>
 
-      <PaginationTable />
+      {/* <PaginationTable /> */}
     </Layout>
   );
 };

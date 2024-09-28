@@ -13,14 +13,7 @@ import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/useAuth";
 import { Navbar } from "@/components/landing-page/Navbar";
 import { Link } from "react-router-dom";
-
-interface RegisterType {
-  name: string;
-  email: string;
-  password: string;
-  confPassword: string;
-  role?: string;
-}
+import { RegisterType } from "@/services/authService";
 
 const Register: React.FC = () => {
   const { register } = useAuth();
@@ -39,7 +32,7 @@ const Register: React.FC = () => {
   return (
     <>
       <Navbar />
-      <div className="h-full py-8 flex flex-col items-center justify-center">
+      <div className="h-[90vh] flex flex-col items-center justify-center">
         <div className="group relative">
           <div className="absolute inset-0 bg-primary rounded-xl transform transition-transform duration-300 group-hover:rotate-2 group-hover:p-1 group-hover:rounded-sm" />
           <Card className="relative z-10 md:w-[450px] w-[350px]">
