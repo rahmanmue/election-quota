@@ -1,11 +1,11 @@
 import axiosInstance from "./api";
 
-interface LoginType {
+export interface LoginType {
   email: string;
   password: string;
 }
 
-interface RegisterType {
+export interface RegisterType {
   name: string;
   email: string;
   password: string;
@@ -13,7 +13,7 @@ interface RegisterType {
   role?: string;
 }
 
-interface Token {
+export interface Token {
   accessToken: string;
 }
 
@@ -36,5 +36,9 @@ export default class AuthService {
   async refreshToken(): Promise<Token> {
     const response = await axiosInstance.post("/auth/refresh-token");
     return response.data;
+  }
+
+  googleLogin() {
+    return "/api/google";
   }
 }

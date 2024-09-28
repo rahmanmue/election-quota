@@ -3,7 +3,7 @@ import { saveToLocalStorage } from "@/lib/authUtils";
 
 // Buat instance axios
 const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: "/api",
   headers: {
     "Content-Type": "application/json",
   },
