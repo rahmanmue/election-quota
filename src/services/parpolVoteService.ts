@@ -35,4 +35,18 @@ export default class ParpolVoteService {
     const response = await axiosInstance.get(`/parpol/vote/${id}`);
     return response.data;
   }
+
+  async uploadDocument(formData: FormData) {
+    try {
+      const response = await axiosInstance.post("/import-excel", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Error uploading document:", error);
+      throw error;
+    }
+  }
 }

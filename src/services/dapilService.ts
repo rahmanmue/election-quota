@@ -26,6 +26,11 @@ export default class DapilService {
     return response.data;
   }
 
+  async allDapil() {
+    const response = await axiosInstance.get("/all-dapil");
+    return response.data;
+  }
+
   async getById(id: string): Promise<{ status: number; data: DapilType }> {
     const response = await axiosInstance.get(`/dapil/${id}`);
     return response.data;

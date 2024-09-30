@@ -1,5 +1,5 @@
 import axios from "axios";
-import { saveToLocalStorage } from "@/lib/authUtils";
+import { decodedToken, saveToLocalStorage } from "@/lib/authUtils";
 
 // Buat instance axios
 const axiosInstance = axios.create({
@@ -21,20 +21,25 @@ axiosInstance.interceptors.response.use(
 
       try {
         // Panggil API refresh-token tanpa menggunakan authService langsung
-        const { data } = await axios.post("/auth/refresh-token");
+        const { data } = await axios.post("/api/auth/refresh-token");
         const { accessToken } = data;
+        const decode = decodedToken(accessToken);
 
         // Set token baru
         originalRequest.headers.Authorization = `Bearer ${accessToken}`;
-        saveToLocalStorage({ token: accessToken, isAuthenticated: true });
+        saveToLocalStorage({
+          token: accessToken,
+          isAuthenticated: true,
+          userId: decode.userId,
+        });
 
         // Ulangi request yang asli
         return axiosInstance(originalRequest);
       } catch (error) {
         console.error("Error refreshing token", error);
         // Logout jika refresh token gagal
-        localStorage.removeItem("authState");
-        window.location.href = "/login";
+        // localStorage.removeItem("authState");
+        // window.location.href = "/login";
       }
     }
 
