@@ -17,12 +17,17 @@ const About = () => {
                 </span>
                 Election Quota
               </h2>
-              <p className="text-xl text-muted-foreground mt-4">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat. Lorem ipsum dolor sit
-                amet, consectetur adipiscing elit.
+              <p className="text-xl text-muted-foreground mt-4 text-justify">
+                Election Quota adalah web untuk menghitung perolehan kursi
+                partai politik menggunakan metode Sainte Lague yang merupakan
+                metode untuk menentukan perolehan kursi partai politik di DPR
+                atau DPRD. Penerapan metode ini didasarkan pada perolehan suara
+                terbanyak partai politik dari hasil pembagian yang diurutkan
+                sesuai dengan jumlah ketersediaan kursi di setiap dapil. Sainte
+                Lague menggunakan bilangan pembagi suara berangka ganjil (1, 3,
+                5, 7, 9 dan seterusnya) untuk mendapatkan kursi. Dasar hukum
+                penerapan metode ini adalah UU nomor 7 tahun 2017 pasal 415 ayat
+                2
               </p>
             </div>
           </div>

@@ -33,7 +33,7 @@ export const Sidebar: React.FC = () => {
           variant="link"
           asChild
         >
-          <Link to="/dashboard" className="flex items-center gap-2">
+          <Link to="/" className="flex items-center gap-2">
             <PackageOpen className="w-6 h-6 mr-1" />
             <h1
               className={cn(

@@ -15,11 +15,12 @@ interface Option {
 interface SelectProps {
   placeholder: string;
   select: Option[];
+  onChange?: (value: string) => void;
 }
 
-export const SelectDemo = ({ placeholder, select }: SelectProps) => {
+export const SelectDemo = ({ placeholder, select, onChange }: SelectProps) => {
   return (
-    <Select>
+    <Select onValueChange={onChange}>
       <SelectTrigger className="w-full">
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>

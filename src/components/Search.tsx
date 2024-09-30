@@ -19,6 +19,7 @@ export const Search = ({ placeholder, onSearch }: SearchProps) => {
       <Input
         type="text"
         placeholder={placeholder}
+        value={search}
         onChange={(e) => setSearch(e.target.value)}
       />
       <Button onClick={handleSearch}>Cari</Button>
