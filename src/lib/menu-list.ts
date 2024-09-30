@@ -101,3 +101,23 @@ export function getMenuList(pathname: string): Group[] {
     },
   ];
 }
+
+interface NavbarList {
+  href: string;
+  label: string;
+}
+
+export const navbarList: NavbarList[] = [
+  {
+    href: "/",
+    label: "Home",
+  },
+  {
+    href: "/login",
+    label: "Login",
+  },
+  {
+    href: "/register",
+    label: "Register",
+  },
+];
