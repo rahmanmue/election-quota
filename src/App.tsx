@@ -59,7 +59,7 @@ const routes = [
       },
       {
         path: "daerah-pemilihan/edit-suara/:id",
-        element: <DapilHasilSuara />,
+        element: <FormSuara />,
       },
       {
         path: "users",
@@ -74,7 +74,7 @@ const routes = [
         children: [
           {
             path: "private",
-            element: <Private />,
+            element: <Dashboard />,
           },
         ],
       },
