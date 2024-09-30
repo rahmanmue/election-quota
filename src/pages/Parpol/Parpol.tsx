@@ -16,7 +16,7 @@ import { PaginationTable } from "@/components/Pagination";
 import { Alert } from "@/components/Alert";
 import ParpolService from "@/services/parpolService";
 import { ResponseParpol, ParpolType } from "@/services/parpolService";
-import { noTabel } from "@/lib/noTabel";
+import { noTabel } from "@/lib/commonUtils";
 import { usePagination } from "@/hooks/usePagination";
 
 const parpolService = new ParpolService();

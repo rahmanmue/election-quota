@@ -2,6 +2,7 @@ import { Modal } from "@/components/Modal";
 import { Input } from "@/components/ui/input";
 import { useEffect, useState } from "react";
 import { ParpolType } from "@/services/parpolService";
+import { isEmptyObject } from "@/lib/commonUtils";
 
 interface ActionModalProps {
   title: string;
@@ -17,7 +18,7 @@ export const ActionModal = ({
   initialData,
 }: ActionModalProps) => {
   const [data, setData] = useState<ParpolType>({
-    name: "",
+    name: initialData?.name || "",
   });
 
   useEffect(() => {
@@ -32,8 +33,19 @@ export const ActionModal = ({
     });
   };
 
+  const handleSubmit = () => {
+    if (!isEmptyObject(data)) {
+      // alert(JSON.stringify(data));
+      submitForm(data, reset);
+      return;
+    }
+
+    alert("Gak Boleh Kosong Coy..");
+    return;
+  };
+
   return (
-    <Modal title={title} icon={icon} submitForm={() => submitForm(data, reset)}>
+    <Modal title={title} icon={icon} submitForm={handleSubmit}>
       <div className="py-4">
         <Input
           className="col-span-2"

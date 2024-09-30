@@ -12,7 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Navbar } from "@/components/landing-page/Navbar";
+import Navbar from "@/components/landing-page/Navbar";
 import google from "@/assets/google.png";
 import { ForgetPasswordModal } from "./ForgetPasswordModal";
 import AuthService from "@/services/authService";

@@ -1,11 +1,15 @@
 import { Modal } from "@/components/Modal";
 import { SelectDemo } from "@/components/Select";
 import { Input } from "@/components/ui/input";
+import { isEmptyObject } from "@/lib/commonUtils";
+import { UserType } from "@/services/userService";
+import { useEffect, useState } from "react";
 
 interface ActionModalProps {
   title: string;
   icon: React.ReactNode;
-  submitForm: () => void;
+  submitForm: (data: UserType, resetState?: () => void) => void;
+  initialData: UserType;
 }
 
 const select = [
@@ -19,13 +23,84 @@ const select = [
   },
 ];
 
-export const ActionModal = ({ title, icon, submitForm }: ActionModalProps) => {
+export const ActionModal = ({
+  title,
+  icon,
+  initialData,
+  submitForm,
+}: ActionModalProps) => {
+  const [data, setData] = useState<UserType>({
+    id: "",
+    name: "",
+    email: "",
+    role: "",
+  });
+
+  useEffect(() => {
+    if (initialData) {
+      setData(initialData);
+    }
+  }, [initialData]);
+
+  // const reset = () => {
+  //   setData({
+  //     id: "",
+  //     name: "",
+  //     email: "",
+  //     role: "",
+  //   });
+  // };
+
+  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleSelectChange = (value: string) => {
+    setData((prevData) => ({
+      ...prevData,
+      role: value,
+    }));
+  };
+
+  const handleSubmit = () => {
+    if (!isEmptyObject(data)) {
+      // alert(JSON.stringify(data));
+      submitForm(data);
+      return;
+    }
+
+    alert("Gak Boleh Kosong Coy..");
+    return;
+  };
+
   return (
-    <Modal title={title} icon={icon} submitForm={submitForm}>
+    <Modal title={title} icon={icon} submitForm={handleSubmit}>
       <div className="py-4 flex flex-col gap-4">
-        <Input type="text" className="col-span-2" placeholder="username" />
-        <Input type="email" className="col-span-2" placeholder="email" />
-        <SelectDemo placeholder="Role" select={select} />
+        <Input
+          type="text"
+          className="col-span-2"
+          name="name"
+          value={data.name}
+          tabIndex={-1}
+          onChange={handleOnChange}
+        />
+        <Input
+          type="email"
+          className="col-span-2"
+          name="email"
+          tabIndex={-1}
+          value={data?.email}
+          onChange={handleOnChange}
+        />
+        <SelectDemo
+          placeholder="Role"
+          select={select}
+          onChange={handleSelectChange}
+        />
       </div>
     </Modal>
   );

@@ -10,10 +10,12 @@ interface ModalEditProps {
 }
 
 export const ModalEditVote = ({ initialData, submitForm }: ModalEditProps) => {
-  const [data, setData] = useState<ParpolVoteType>({
+  const baseData: ParpolVoteType = {
     total_suara_sah: initialData?.total_suara_sah || 0,
     id: initialData?.id || "",
-  });
+  };
+
+  const [data, setData] = useState<ParpolVoteType>(baseData);
 
   useEffect(() => {
     if (initialData) {
@@ -30,12 +32,7 @@ export const ModalEditVote = ({ initialData, submitForm }: ModalEditProps) => {
     <Modal
       title="Edit Total Suara"
       icon={<Pencil />}
-      submitForm={() =>
-        submitForm({
-          id: data.id,
-          total_suara_sah: data.total_suara_sah,
-        })
-      }
+      submitForm={() => submitForm(data)}
     >
       <div>
         <Input

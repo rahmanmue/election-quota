@@ -1,9 +1,11 @@
 import { Modal } from "@/components/Modal";
 import { SelectDemo } from "@/components/Select";
 import { Input } from "@/components/ui/input";
-import { provinsi } from "@/lib/provinsi-list.";
+import { provinsi } from "@/lib/provinsi-list";
 import { DapilType } from "@/services/dapilService";
 import { useEffect, useState } from "react";
+import { Label } from "@/components/ui/label";
+import { isEmptyObject } from "@/lib/commonUtils";
 
 interface ActionModalProps {
   title: string;
@@ -58,46 +60,72 @@ export const ActionModal = ({
     }));
   };
 
+  const handleSubmit = () => {
+    if (!isEmptyObject(data)) {
+      // alert(JSON.stringify(data));
+      submitForm(data, reset);
+      return;
+    }
+
+    alert("Gak Boleh Kosong Coy..");
+    return;
+  };
+
   return (
-    <Modal title={title} icon={icon} submitForm={() => submitForm(data, reset)}>
-      <div className="py-4 flex flex-col gap-4">
-        <SelectDemo
-          placeholder="Provinsi"
-          select={provinsi}
-          onChange={handleSelectChange}
-        />
-        <Input
-          type="text"
-          name="kabupaten_kota"
-          className="col-span-2"
-          placeholder="Kab / Kota"
-          value={data.kabupaten_kota}
-          onChange={handleOnChange}
-        />
-        <Input
-          type="text"
-          name="daerah_pemilihan"
-          className="col-span-2"
-          placeholder="Daerah Pemilihan"
-          value={data.daerah_pemilihan}
-          onChange={handleOnChange}
-        />
-        <Input
-          type="text"
-          name="tahun"
-          className="col-span-2"
-          value={data.tahun}
-          onChange={handleOnChange}
-          placeholder="Tahun"
-        />
-        <Input
-          type="number"
-          name="alokasi_kursi"
-          className="col-span-2"
-          value={data.alokasi_kursi}
-          onChange={handleOnChange}
-          placeholder="Alokasi Kursi"
-        />
+    <Modal title={title} icon={icon} submitForm={handleSubmit}>
+      <div className="py-4 flex flex-col gap-y-3.5">
+        <div className="grid w-full max-w-sm items-center gap-2">
+          <Label>Provinsi</Label>
+          <SelectDemo
+            placeholder="Provinsi"
+            select={provinsi}
+            onChange={handleSelectChange}
+          />
+        </div>
+        <div className="grid w-full max-w-sm items-center gap-2">
+          <Label>Kab/Kota</Label>
+          <Input
+            type="text"
+            name="kabupaten_kota"
+            className="col-span-2"
+            placeholder="Kab / Kota"
+            value={data.kabupaten_kota}
+            onChange={handleOnChange}
+          />
+        </div>
+        <div className="grid w-full max-w-sm items-center gap-2">
+          <Label>Daerah Pemilihan</Label>
+          <Input
+            type="text"
+            name="daerah_pemilihan"
+            className="col-span-2"
+            placeholder="Daerah Pemilihan"
+            value={data.daerah_pemilihan}
+            onChange={handleOnChange}
+          />
+        </div>
+        <div className="grid w-full max-w-sm items-center gap-2">
+          <Label>Tahun</Label>
+          <Input
+            type="text"
+            name="tahun"
+            className="col-span-2"
+            value={data.tahun}
+            onChange={handleOnChange}
+            placeholder="Tahun"
+          />
+        </div>
+        <div className="grid w-full max-w-sm items-center gap-2">
+          <Label>Alokasi Kursi</Label>
+          <Input
+            type="number"
+            name="alokasi_kursi"
+            className="col-span-2"
+            value={data.alokasi_kursi}
+            onChange={handleOnChange}
+            placeholder="Alokasi Kursi"
+          />
+        </div>
       </div>
     </Modal>
   );

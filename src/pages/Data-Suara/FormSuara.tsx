@@ -1,15 +1,5 @@
 import { Layout } from "@/components/admin-panel/Layout";
 import { Button } from "@/components/ui/button";
-import { FilePlus2 } from "lucide-react";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
@@ -17,6 +7,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import ParpolVoteService from "@/services/parpolVoteService";
 import ParpolService from "@/services/parpolService";
 import { ModalEditVote } from "./ModalEdit";
+import { DokumenUpload } from "./DokumenUpload";
 
 const parpolVoteService = new ParpolVoteService();
 const parpolService = new ParpolService();
@@ -26,15 +17,40 @@ const FormSuara = () => {
   const pathname = useLocation().pathname;
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const checkVoteStatus = async () => {
+      const { data } = await parpolVoteService.getParpolVoteByDapil(
+        id as string
+      );
+
+      if (
+        (pathname.includes("tambah") && data.length != 0) ||
+        (pathname.includes("edit") && data.length == 0)
+      ) {
+        navigate(`/daerah-pemilihan/${id}`);
+      }
+    };
+
+    checkVoteStatus();
+  }, [id, pathname, navigate]);
+
   //state
-  const [vote, setVote] = useState<Record<string, number | string>>({});
+  const [vote, setVote] = useState<{ [key: string]: string | number }>({});
   const [dForm, setDForm] = useState<any[]>([]);
+
+  useEffect(() => {
+    const initialState = dForm.reduce((acc, item) => {
+      acc[item.name] = 0; // Set all names to 0 initially
+      return acc;
+    }, {});
+    setVote(initialState);
+  }, [dForm]);
 
   const getAllParpol = async () => {
     const isTambah = pathname.includes("tambah");
     const { data } = isTambah
       ? await parpolService.getAll(1, 100)
-      : await parpolVoteService.getParpolVoteByDapil(id!);
+      : await parpolVoteService.getParpolVoteByDapil(id as string);
 
     setDForm(data);
   };
@@ -45,7 +61,7 @@ const FormSuara = () => {
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setVote((prev) => ({ ...prev, [name]: value }));
+    setVote((prev) => ({ ...prev, [name]: value !== "" ? value : "0" }));
   };
 
   const submitFormAdd = async () => {
@@ -54,6 +70,8 @@ const FormSuara = () => {
       total_suara_sah: value !== "" ? Number(value) : 0,
       daerah_pemilihan_id: id,
     }));
+
+    // alert(JSON.stringify(newData));
 
     await parpolVoteService.addParpolVote(newData);
     navigate(`/daerah-pemilihan/${id}`);
@@ -64,6 +82,11 @@ const FormSuara = () => {
     getAllParpol();
   };
 
+  const uploadDoc = async (formData: FormData) => {
+    await parpolVoteService.uploadDocument(formData);
+    navigate(`/daerah-pemilihan/${id}`);
+  };
+
   return (
     <Layout
       title={
@@ -72,36 +95,10 @@ const FormSuara = () => {
           : "Edit Suara Parpol"
       }
     >
-      <Dialog>
-        <DialogTrigger asChild>
-          <Button
-            className={`my-4 ${pathname.includes("edit") ? "hidden" : ""}`}
-          >
-            <FilePlus2 />
-            <span className="ml-2">Tambah Via Dokumen</span>
-          </Button>
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Upload Dokumen</DialogTitle>
-            <DialogDescription>
-              Download template
-              <a href="/api/download-parpol" className="text-primary underline">
-                {" "}
-                dokumen ini{" "}
-              </a>
-              lalu upload kembali dengan data yang sudah terisi.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="py-2">
-            <Input type="file" />
-          </div>
+      <div className={`my-4 ${pathname.includes("edit") ? "hidden" : ""}`}>
+        <DokumenUpload onUpload={uploadDoc} />
+      </div>
 
-          <DialogFooter>
-            <Button type="submit">Save changes</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
       <table className="w-full border-collapse">
         <thead>
           <tr className="bg-[#0f172a] text-white text-sm md:text-base">
@@ -125,6 +122,7 @@ const FormSuara = () => {
               <td className="py-3 md:px-4 px-2 text-center">
                 {pathname.includes("tambah") ? (
                   <Input
+                    required
                     type="number"
                     min={0}
                     placeholder="Masukan Total Suara Sah"

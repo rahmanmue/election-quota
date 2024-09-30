@@ -1,7 +1,7 @@
 import { Layout } from "@/components/admin-panel/Layout";
 import { Search } from "@/components/Search";
 import { ActionModal } from "./ActionModal";
-import { Pencil } from "lucide-react";
+import { Pencil, RefreshCcwIcon } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -12,100 +12,95 @@ import {
 } from "@/components/ui/table";
 import { PaginationTable } from "@/components/Pagination";
 import { Alert } from "@/components/Alert";
+import { useEffect } from "react";
+import UserService, { ResponseUser, UserType } from "@/services/userService";
+import { usePagination } from "@/hooks/usePagination";
+import { noTabel } from "@/lib/commonUtils";
+import { Button } from "@/components/ui/button";
 
-const invoices = [
-  {
-    invoice: "INV001",
-    paymentStatus: "Paid",
-    totalAmount: "$250.00",
-    paymentMethod: "Credit Card",
-  },
-  {
-    invoice: "INV002",
-    paymentStatus: "Pending",
-    totalAmount: "$150.00",
-    paymentMethod: "PayPal",
-  },
-  {
-    invoice: "INV003",
-    paymentStatus: "Unpaid",
-    totalAmount: "$350.00",
-    paymentMethod: "Bank Transfer",
-  },
-  {
-    invoice: "INV004",
-    paymentStatus: "Paid",
-    totalAmount: "$450.00",
-    paymentMethod: "Credit Card",
-  },
-  {
-    invoice: "INV005",
-    paymentStatus: "Paid",
-    totalAmount: "$550.00",
-    paymentMethod: "PayPal",
-  },
-  {
-    invoice: "INV006",
-    paymentStatus: "Pending",
-    totalAmount: "$200.00",
-    paymentMethod: "Bank Transfer",
-  },
-  {
-    invoice: "INV007",
-    paymentStatus: "Unpaid",
-    totalAmount: "$300.00",
-    paymentMethod: "Credit Card",
-  },
-];
+const userService = new UserService();
 
 const Users = () => {
-  const addSubmitForm = () => {
-    alert("Add");
+  const { data, page, totalPages, pageSize, setPaginationData } =
+    usePagination<UserType>();
+
+  const getAllUser = async () => {
+    const res = await userService.getAll();
+    setPaginationData(res.data, res.currentPage, res.totalPages, res.pageSize);
   };
 
-  const onDelete = () => {
-    alert("Delete");
+  useEffect(() => {
+    getAllUser();
+  }, []);
+
+  const onEditUser = async (data: UserType) => {
+    // alert(JSON.stringify(data));
+    await userService.updateUser(data);
+    getAllUser();
   };
 
-  const onSearch = (search: string) => {
-    alert(search);
+  const onDelete = async (id: string) => {
+    await userService.deleteUser(id);
+    getAllUser();
+  };
+
+  const onSearch = async (search: string) => {
+    const res = await userService.searhByKeyword(search);
+    setPaginationData(res.data, res.currentPage, res.totalPages, res.pageSize);
+  };
+
+  const pagination = async (page: number) => {
+    const res = (await userService.getAll(page)) as ResponseUser;
+    setPaginationData(res.data, res.currentPage, res.totalPages, res.pageSize);
   };
 
   return (
     <Layout title="Users">
-      <div className="w-full flex flex-col gap-2 justify-end md:flex-row mb-5">
+      <div className="w-full flex flex-col gap-2 justify-between md:flex-row mb-5">
+        <Button variant="ghost" onClick={getAllUser}>
+          <RefreshCcwIcon />
+        </Button>
         <Search placeholder="Cari User" onSearch={onSearch} />
       </div>
 
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[100px]">Invoice</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Method</TableHead>
-            <TableHead className="text-right">Amount</TableHead>
+            <TableHead className="w-[100px]">No</TableHead>
+            <TableHead>Nama</TableHead>
+            <TableHead>Email</TableHead>
+            <TableHead>Role</TableHead>
+            <TableHead className="text-right">Action</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {invoices.map((invoice) => (
-            <TableRow key={invoice.invoice}>
-              <TableCell className="font-medium">{invoice.invoice}</TableCell>
-              <TableCell>{invoice.paymentStatus}</TableCell>
-              <TableCell>{invoice.paymentMethod}</TableCell>
+          {data.map((item, i) => (
+            <TableRow key={item.id}>
+              <TableCell className="font-medium">
+                {noTabel(i, page, pageSize)}
+              </TableCell>
+              <TableCell>{item.name}</TableCell>
+              <TableCell>{item.email}</TableCell>
+              <TableCell className="capitalize">{item.role}</TableCell>
               <TableCell className="text-right flex gap-2 justify-end">
                 <ActionModal
                   title={"Edit User"}
                   icon={<Pencil />}
-                  submitForm={addSubmitForm}
+                  initialData={item}
+                  submitForm={(updateData) => onEditUser(updateData)}
                 />
-                <Alert onDelete={onDelete} />
+                <Alert onDelete={() => onDelete(item.id!)} />
               </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
 
-      {/* <PaginationTable /> */}
+      <PaginationTable
+        currentPage={page}
+        totalPages={totalPages}
+        onPageChange={pagination}
+      />
     </Layout>
   );
 };

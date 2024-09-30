@@ -11,7 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/useAuth";
-import { Navbar } from "@/components/landing-page/Navbar";
+import Navbar from "@/components/landing-page/Navbar";
 import { Link } from "react-router-dom";
 import { RegisterType } from "@/services/authService";
 

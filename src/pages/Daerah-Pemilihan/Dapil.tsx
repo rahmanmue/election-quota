@@ -17,7 +17,7 @@ import { PaginationTable } from "@/components/Pagination";
 import { DapilType, ResponseDapil } from "@/services/dapilService";
 import { usePagination } from "@/hooks/usePagination";
 import { useEffect } from "react";
-import { noTabel } from "@/lib/noTabel";
+import { noTabel } from "@/lib/commonUtils";
 import { Link } from "react-router-dom";
 
 const dapilService = new DapilService();
@@ -106,11 +106,11 @@ const Dapil = () => {
                 {item.alokasi_kursi}
               </TableCell>
               <TableCell className="text-right flex gap-2 justify-end">
-                <Button variant="ghost">
-                  <Link to={`/daerah-pemilihan/${item.id}`}>
+                <Link to={`/daerah-pemilihan/${item.id}`}>
+                  <Button variant="ghost">
                     <NotebookTabs />
-                  </Link>
-                </Button>
+                  </Button>
+                </Link>
                 <ActionModal
                   title={"Edit Partai Politik"}
                   icon={<Pencil />}
