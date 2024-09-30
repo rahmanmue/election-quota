@@ -5,6 +5,7 @@ import { RootState } from "@/store/store";
 import { checkTokenExpiry, loginSuccess, logout } from "@/store/authSlice";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import { decodedToken } from "@/lib/authUtils";
 
 interface LoginType {
   email: string;
@@ -36,7 +37,9 @@ export const useAuth = () => {
   const login = async (data: LoginType) => {
     try {
       const { accessToken } = await authService.login(data);
-      dispatch(loginSuccess({ token: accessToken }));
+      const decoded = decodedToken(accessToken);
+
+      dispatch(loginSuccess({ token: accessToken, userId: decoded.userId }));
       navigate("/private");
     } catch (error) {
       // Menangani kesalahan dengan lebih baik
