@@ -33,11 +33,11 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ roles }) => {
   }
 
   if (!isAuthenticated) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/sign-in" />;
   }
 
   if (roles && userRole && !roles.includes(userRole)) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/sign-in" />;
   }
 
   return <Outlet />;

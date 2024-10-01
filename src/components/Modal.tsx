@@ -19,7 +19,8 @@ interface ModalProps {
 export const Modal = ({ title, icon, children, submitForm }: ModalProps) => {
   const [open, setOpen] = useState<boolean>(false);
 
-  const handleSubmit = () => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     submitForm();
     setOpen(!open);
   };
@@ -30,13 +31,15 @@ export const Modal = ({ title, icon, children, submitForm }: ModalProps) => {
         <Button variant="ghost">{icon}</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
-        </DialogHeader>
-        {children}
-        <DialogFooter>
-          <Button onClick={handleSubmit}>Save changes</Button>
-        </DialogFooter>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <DialogHeader>
+            <DialogTitle>{title}</DialogTitle>
+          </DialogHeader>
+          {children}
+          <DialogFooter>
+            <Button type="submit">Save changes</Button>
+          </DialogFooter>
+        </form>
       </DialogContent>
     </Dialog>
   );

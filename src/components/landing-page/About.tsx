@@ -2,7 +2,7 @@ import law from "@/assets/Lawyer-amico.svg";
 const About = () => {
   return (
     <section id="about" className="container py-24 sm:py-32">
-      <div className="bg-muted/50 border rounded-lg py-12">
+      <div className="py-12">
         <div className="px-6 flex items-center flex-col-reverse md:flex-row gap-8 md:gap-12">
           <img
             src={law}
@@ -17,7 +17,7 @@ const About = () => {
                 </span>
                 Election Quota
               </h2>
-              <p className="text-xl text-muted-foreground mt-4 text-justify">
+              <p className="md:text-xl text-sm text-muted-foreground mt-4 text-justify">
                 Election Quota adalah web untuk menghitung perolehan kursi
                 partai politik menggunakan metode Sainte Lague yang merupakan
                 metode untuk menentukan perolehan kursi partai politik di DPR

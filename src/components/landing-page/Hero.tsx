@@ -28,7 +28,7 @@ const Hero = () => {
           to your project.
         </p>
 
-        <div className="flex gap-2">
+        <div className="flex gap-2 justify-center md:justify-normal">
           <a href="#calculation" className={buttonVariants({})}>
             Show Calculation
           </a>

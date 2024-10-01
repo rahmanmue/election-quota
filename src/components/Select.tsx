@@ -26,8 +26,10 @@ export const SelectDemo = ({ placeholder, select, onChange }: SelectProps) => {
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
-          {select.map((s) => (
-            <SelectItem value={s.value}>{s.item}</SelectItem>
+          {select.map((s, i) => (
+            <SelectItem key={i} value={s.value}>
+              {s.item}
+            </SelectItem>
           ))}
         </SelectGroup>
       </SelectContent>

@@ -1,12 +1,9 @@
 import { useEffect, useState } from "react";
-
-import { TrendingUp } from "lucide-react";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -34,12 +31,7 @@ interface BarChartProps {
   provinsi?: string;
 }
 
-export function Component({
-  vote,
-  tahun = "",
-  dapil = "",
-  provinsi = "",
-}: BarChartProps) {
+export function ComponentBarChart({ vote }: BarChartProps) {
   const [chartData, setCData] = useState([]);
   useEffect(() => {
     // console.log(vote);
@@ -56,14 +48,6 @@ export function Component({
     <Card>
       <CardHeader>
         <CardTitle>Perolehan Alokasi Kursi DPR/DPRD Partai Politik</CardTitle>
-        {dapil != "" ? (
-          <CardDescription>
-            Daerah Pemilihan {dapil} tahun {tahun} Provinsi{" "}
-            <span className="capitalize">{provinsi}</span>
-          </CardDescription>
-        ) : (
-          " "
-        )}
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
@@ -95,8 +79,7 @@ export function Component({
         </div>
         <div className="leading-none text-muted-foreground">
           Menampilkan perolehan kursi setiap partai politik berdasarkan daerah
-          pemilihan {dapil} provinsi{" "}
-          <span className="capitalize">{provinsi}</span>.
+          pemilihan.
         </div>
       </CardFooter>
     </Card>

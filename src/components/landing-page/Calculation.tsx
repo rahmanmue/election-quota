@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { SelectDemo } from "../Select";
 import { Button } from "../ui/button";
-import { Component } from "@/components/BarChart";
+import { ComponentBarChart } from "@/components/BarChart";
 import {
   Table,
   TableBody,
@@ -67,12 +67,12 @@ const Calculation = () => {
 
   const handleSearch = () => {
     getCalculation(idDapil);
-    console.log(data);
+    // console.log(data);
   };
 
   return (
-    <section id="calculation" className="container py-24 sm:py-32">
-      <div className="flex flex-col justify-center gap-3">
+    <section id="calculation" className="container bg-muted/50 h-max py-10">
+      <div className="flex flex-col md:justify-center gap-3">
         <h2 className="text-3xl md:text-4xl font-bold text-center">
           <span className="bg-gradient-to-b from-primary/60 to-primary text-transparent bg-clip-text">
             Cari{" "}
@@ -99,10 +99,10 @@ const Calculation = () => {
           }
         >
           <div className="mb-6 mt-2 md:w-3/5 mx-auto ">
-            <Component vote={data ?? []} />
+            <ComponentBarChart vote={data ?? []} />
           </div>
 
-          <Table>
+          <Table className="bg-white dark:bg-[hsl(var(--background))] border rounded-lg">
             <TableHeader>
               <TableRow>
                 <TableHead rowSpan={2}>Nama Partai</TableHead>

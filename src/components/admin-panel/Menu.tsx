@@ -1,7 +1,7 @@
 import { Ellipsis, LogOut } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-import { getMenuList } from "@/lib/menu-list";
+import { getMenuListAdmin, getMenuListUser } from "@/lib/menu-list";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { CollapseMenuButton } from "@/components/admin-panel/CollapseMenuButton";
@@ -11,18 +11,40 @@ import {
   TooltipContent,
   TooltipProvider,
 } from "@/components/ui/tooltip";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
+import { useEffect, useState } from "react";
+import { decodedToken, loadFromLocalStorage } from "@/lib/authUtils";
 
 interface MenuProps {
   isOpen: boolean | undefined;
 }
 
 export function Menu({ isOpen }: MenuProps) {
-  const pathname = useLocation().pathname;
-  const menuList = getMenuList(pathname);
   const { logoutUser } = useAuth();
+  const navigate = useNavigate();
+  const pathname = useLocation().pathname;
+  const [menuList, setMenuList] = useState<any[]>([]);
+
+  useEffect(() => {
+    try {
+      const authState = loadFromLocalStorage();
+
+      if (authState && authState.token) {
+        const decode = decodedToken(authState.token);
+        if (decode?.role === "admin") {
+          setMenuList(getMenuListAdmin(pathname));
+        } else if (decode?.role === "user") {
+          setMenuList(getMenuListUser(pathname));
+        }
+      } else {
+        navigate("/");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
 
   return (
     <ScrollArea className="[&>div>div[style]]:!block">
@@ -50,8 +72,11 @@ export function Menu({ isOpen }: MenuProps) {
               ) : (
                 <p className="pb-2"></p>
               )}
-              {menus.map(
-                ({ href, label, icon: Icon, active, submenus }, index) =>
+              {menus?.map(
+                (
+                  { href, label, icon: Icon, active, submenus }: any,
+                  index: any
+                ) =>
                   submenus.length === 0 ? (
                     <div className="w-full" key={index}>
                       <TooltipProvider disableHoverableContent>

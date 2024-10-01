@@ -12,15 +12,6 @@ export function Footer() {
           >
             shadcn/ui
           </a>
-          . The source code is available on{" "}
-          <a
-            href="https://github.com/salimi-my/shadcn-ui-sidebar"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="font-medium underline underline-offset-4"
-          >
-            GitHub
-          </a>
           .
         </p>
       </div>

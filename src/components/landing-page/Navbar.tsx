@@ -21,7 +21,7 @@ const Navbar = () => {
   const [open, isOpen] = useState<boolean>(false);
 
   return (
-    <header className="sticky border-b-[1px] top-0 z-10 w-full bg-white dark:border-b-slate-700 dark:bg-background">
+    <header className="sticky border-b-[1px] top-0 z-50 w-full bg-white dark:border-b-slate-700 dark:bg-background">
       <NavigationMenu className="mx-auto px-4">
         <NavigationMenuList className="container h-14 px-4 w-[98vw] box-border flex md:justify-center justify-between items-center relative">
           <NavigationMenuItem className="font-bold md:absolute left-6">
