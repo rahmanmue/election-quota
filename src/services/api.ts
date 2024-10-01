@@ -38,8 +38,8 @@ axiosInstance.interceptors.response.use(
       } catch (error) {
         console.error("Error refreshing token", error);
         // Logout jika refresh token gagal
-        // localStorage.removeItem("authState");
-        // window.location.href = "/login";
+        localStorage.removeItem("authState");
+        window.location.href = "/sign-in";
       }
     }
 

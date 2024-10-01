@@ -7,6 +7,7 @@ export interface DapilType {
   provinsi: string;
   tahun: number | string;
   alokasi_kursi: number | string;
+  user_id?: string;
 }
 
 export interface ResponseDapil {
