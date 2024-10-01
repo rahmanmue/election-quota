@@ -18,10 +18,12 @@ import ParpolService from "@/services/parpolService";
 import { ResponseParpol, ParpolType } from "@/services/parpolService";
 import { noTabel } from "@/lib/commonUtils";
 import { usePagination } from "@/hooks/usePagination";
+import { useToast } from "@/hooks/use-toast";
 
 const parpolService = new ParpolService();
 
 const Parpol = () => {
+  const { toast } = useToast();
   const { data, page, totalPages, pageSize, setPaginationData } =
     usePagination<ParpolType>();
 
@@ -35,13 +37,23 @@ const Parpol = () => {
   }, []);
 
   const addForm = async (data: ParpolType) => {
-    await parpolService.addParpol(data);
+    const { message } = await parpolService.addParpol(data);
+    toast({
+      title: "Success",
+      description: message,
+    });
     getAllParpol();
+    return;
   };
 
   const updateForm = async (data: ParpolType) => {
-    await parpolService.updateParpol(data);
+    const { message } = await parpolService.updateParpol(data);
+    toast({
+      title: "Success",
+      description: message,
+    });
     getAllParpol();
+    return;
   };
 
   const deleteParpol = async (id: string) => {

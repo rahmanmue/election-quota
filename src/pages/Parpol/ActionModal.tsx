@@ -3,6 +3,7 @@ import { Input } from "@/components/ui/input";
 import { useEffect, useState } from "react";
 import { ParpolType } from "@/services/parpolService";
 import { isEmptyObject } from "@/lib/commonUtils";
+import { useToast } from "@/hooks/use-toast";
 
 interface ActionModalProps {
   title: string;
@@ -17,6 +18,7 @@ export const ActionModal = ({
   submitForm,
   initialData,
 }: ActionModalProps) => {
+  const { toast } = useToast();
   const [data, setData] = useState<ParpolType>({
     name: initialData?.name || "",
   });
@@ -35,12 +37,20 @@ export const ActionModal = ({
 
   const handleSubmit = () => {
     if (!isEmptyObject(data)) {
-      // alert(JSON.stringify(data));
       submitForm(data, reset);
       return;
     }
 
-    alert("Gak Boleh Kosong Coy..");
+    toast({
+      title: "Uh oh! Empty Data.",
+      description: "There was a Empty Data with your request!.",
+      variant: "destructive",
+    });
+
+    if (initialData) {
+      setData(initialData as ParpolType);
+    }
+
     return;
   };
 

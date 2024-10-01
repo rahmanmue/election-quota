@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { Link, Navigate } from "react-router-dom";
 import {
@@ -11,103 +11,179 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import Navbar from "@/components/landing-page/Navbar";
 import google from "@/assets/google.png";
 import { ForgetPasswordModal } from "./ForgetPasswordModal";
 import AuthService from "@/services/authService";
-import { LoginType } from "@/services/authService";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Eye, EyeOff } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+
+const formSchema = z.object({
+  email: z
+    .string()
+    .email({
+      message: "email is not valid",
+    })
+    .min(1, {
+      message: "email is not empty",
+    }),
+  password: z.string().min(1, {
+    message: "password is not empty",
+  }),
+});
 
 const authSevice = new AuthService();
 
 const Login: React.FC = () => {
   const { login, isAuthenticated } = useAuth();
-  console.log(isAuthenticated);
+  const { toast } = useToast();
 
-  if (isAuthenticated) {
-    return <Navigate to="/private" />;
-  }
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
 
-  const handleSubmit = async () => {
-    const data = {
-      email: "rahman.muraman@gmail.com",
-      password: "admin123",
-    } as LoginType;
+  // State for password visibility toggle
+  const [showPassword, setShowPassword] = useState(false);
+  const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
-    await login(data);
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    try {
+      await login(values);
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        title: `${error.message}.`,
+        description: "Please enter valid data.",
+      });
+    }
   };
+
+  // const handleSubmitTest = async () => {
+  //   const data = {
+  //     email: "rahman.muraman@gmail.com",
+  //     password: "admin123",
+  //   } as LoginType;
+
+  //   await login(data);
+  // };
 
   const handleGoogleLogin = () => {
     // Redirect ke backend untuk memulai proses login dengan Google
     window.location.href = authSevice.googleLogin();
   };
+
+  if (isAuthenticated) {
+    return <Navigate to="/dashboard" />;
+  }
   return (
     <>
       <Navbar />
       <div className="h-[90vh] flex flex-col items-center justify-center">
         <div className="group relative">
           <div className="absolute inset-0 bg-primary rounded-xl transform transition-transform duration-300 group-hover:rotate-3 group-hover:p-1 group-hover:rounded-sm" />
-          <Card className="relative z-10 md:w-[450px] w-[350px]">
-            <CardHeader>
-              <CardTitle>Login</CardTitle>
-              <CardDescription>
-                Don't have Account{" "}
-                <Link to="/register" className="text-primary">
-                  Create Account.
-                </Link>
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <form>
-                <div className="grid w-full items-center gap-4">
-                  <div className="flex flex-col space-y-1.5 ">
-                    <Label className="mb-1" htmlFor="email">
-                      Email
-                    </Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      placeholder="Masukan Email"
+          <Form {...form}>
+            <Card className="relative z-10 md:w-[450px] w-[350px]">
+              <form onSubmit={form.handleSubmit(onSubmit)}>
+                <CardHeader>
+                  <CardTitle>Login</CardTitle>
+                  <CardDescription>
+                    Don't have Account{" "}
+                    <Link to="/sign-up" className="text-primary">
+                      Create Account.
+                    </Link>
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid w-full items-center gap-4">
+                    <FormField
+                      control={form.control}
+                      name="email"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>email</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="Masukan Email"
+                              type="email"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="password"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Password</FormLabel>
+                          <FormControl>
+                            <div className="relative">
+                              <Input
+                                placeholder="Masukan Password"
+                                type={showPassword ? "text" : "password"}
+                                {...field}
+                              />
+                              <span
+                                className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
+                                onClick={togglePasswordVisibility}
+                              >
+                                {showPassword ? (
+                                  <EyeOff className="h-5 w-5" />
+                                ) : (
+                                  <Eye className="h-5 w-5" />
+                                )}
+                              </span>
+                            </div>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
                     />
                   </div>
-                  <div className="flex flex-col space-y-1.5 ">
-                    <Label className="mb-1" htmlFor="password">
-                      Password
-                    </Label>
-                    <Input
-                      id="password"
-                      type="password"
-                      placeholder="Masukan Password"
-                    />
+                </CardContent>
+                <CardFooter>
+                  <div className="flex flex-col gap-2 w-full">
+                    <Button className="w-full" type="submit">
+                      Sign In
+                    </Button>
+                    {/* <Button onClick={handleSubmitTest}>Login Test</Button> */}
                   </div>
-                </div>
+                </CardFooter>
               </form>
-
-              <ForgetPasswordModal
-                title="Forget Password"
-                submitForm={() => alert("Hello")}
-              >
-                <span className="inline-block text-sm underline mt-3 cursor-pointer">
-                  forget password?
-                </span>
-              </ForgetPasswordModal>
-            </CardContent>
-            <CardFooter>
-              <div className="flex flex-col gap-2 w-full">
-                <Button className="w-full" onClick={handleSubmit}>
-                  Sign In
-                </Button>
+              <CardFooter>
                 <Button
                   variant={"outline"}
                   onClick={handleGoogleLogin}
-                  className="flex items-center gap-3"
+                  className="flex items-center gap-3 w-full -mt-3"
                 >
                   <img src={google} alt="google-icon" className="w-5" />
                   Sign In With Google
                 </Button>
-              </div>
-            </CardFooter>
-          </Card>
+              </CardFooter>
+              <ForgetPasswordModal title="Forget Password">
+                <span className="block text-sm underline -mt-3 mb-3 cursor-pointer text-center">
+                  forget password?
+                </span>
+              </ForgetPasswordModal>
+            </Card>
+          </Form>
         </div>
       </div>
     </>

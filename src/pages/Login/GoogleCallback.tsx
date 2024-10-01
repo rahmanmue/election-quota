@@ -1,8 +1,8 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
 
 const GoogleCallback = () => {
-  const navigate = useNavigate();
+  const { loginViaGoogle } = useAuth();
 
   useEffect(() => {
     // Ambil access token dari URL
@@ -10,15 +10,11 @@ const GoogleCallback = () => {
     const accessToken = urlParams.get("accessToken");
 
     if (accessToken) {
-      // Simpan accessToken di localStorage atau state
-      localStorage.setItem("accessToken", accessToken);
-
-      // Redirect ke halaman utama atau dashboard
-      navigate("/dashboard");
+      loginViaGoogle(accessToken);
     } else {
       console.error("No access token found");
     }
-  }, [navigate]);
+  }, []);
 
   return <div>Logging in...</div>;
 };

@@ -8,11 +8,13 @@ import ParpolVoteService from "@/services/parpolVoteService";
 import ParpolService from "@/services/parpolService";
 import { ModalEditVote } from "./ModalEdit";
 import { DokumenUpload } from "./DokumenUpload";
+import { useToast } from "@/hooks/use-toast";
 
 const parpolVoteService = new ParpolVoteService();
 const parpolService = new ParpolService();
 
 const FormSuara = () => {
+  const { toast } = useToast();
   const { id } = useParams();
   const pathname = useLocation().pathname;
   const navigate = useNavigate();
@@ -71,9 +73,12 @@ const FormSuara = () => {
       daerah_pemilihan_id: id,
     }));
 
-    // alert(JSON.stringify(newData));
-
     await parpolVoteService.addParpolVote(newData);
+    toast({
+      title: "Success",
+      description: "Data Success Created.",
+    });
+
     navigate(`/daerah-pemilihan/${id}`);
   };
 
@@ -84,6 +89,10 @@ const FormSuara = () => {
 
   const uploadDoc = async (formData: FormData) => {
     await parpolVoteService.uploadDocument(formData);
+    toast({
+      title: "Success",
+      description: "Data Success Created",
+    });
     navigate(`/daerah-pemilihan/${id}`);
   };
 

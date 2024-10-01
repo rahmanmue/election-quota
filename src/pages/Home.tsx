@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Navbar from "@/components/landing-page/Navbar";
 import Footer from "@/components/landing-page/Footer";
 import Hero from "@/components/landing-page/Hero";
@@ -7,6 +7,10 @@ import ScrollToTop from "@/components/ScrollToTop";
 import Calculation from "@/components/landing-page/Calculation";
 
 const Home: React.FC = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <>
       <Navbar />

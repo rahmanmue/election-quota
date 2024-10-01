@@ -1,6 +1,7 @@
 import { Modal } from "@/components/Modal";
 import { SelectDemo } from "@/components/Select";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/hooks/use-toast";
 import { isEmptyObject } from "@/lib/commonUtils";
 import { UserType } from "@/services/userService";
 import { useEffect, useState } from "react";
@@ -29,6 +30,7 @@ export const ActionModal = ({
   initialData,
   submitForm,
 }: ActionModalProps) => {
+  const { toast } = useToast();
   const [data, setData] = useState<UserType>({
     id: "",
     name: "",
@@ -41,15 +43,6 @@ export const ActionModal = ({
       setData(initialData);
     }
   }, [initialData]);
-
-  // const reset = () => {
-  //   setData({
-  //     id: "",
-  //     name: "",
-  //     email: "",
-  //     role: "",
-  //   });
-  // };
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -73,7 +66,12 @@ export const ActionModal = ({
       return;
     }
 
-    alert("Gak Boleh Kosong Coy..");
+    toast({
+      title: "Uh oh! Empty Data.",
+      description: "There was a Empty Data with your request!.",
+      variant: "destructive",
+    });
+    setData(initialData);
     return;
   };
 

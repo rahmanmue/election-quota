@@ -19,10 +19,12 @@ import { usePagination } from "@/hooks/usePagination";
 import { useEffect } from "react";
 import { noTabel } from "@/lib/commonUtils";
 import { Link } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
 
 const dapilService = new DapilService();
 
 const Dapil = () => {
+  const { toast } = useToast();
   const { data, page, totalPages, pageSize, setPaginationData } =
     usePagination<DapilType>();
 
@@ -36,14 +38,23 @@ const Dapil = () => {
   }, []);
 
   const addForm = async (data: DapilType) => {
-    // alert(JSON.stringify(data));
-    await dapilService.addDapil(data);
+    const { message } = await dapilService.addDapil(data);
+    toast({
+      title: "Success",
+      description: message,
+    });
     getAllDapil();
+    return;
   };
 
   const updateForm = async (data: DapilType) => {
-    await dapilService.updateDapil(data);
+    const { message } = await dapilService.updateDapil(data);
+    toast({
+      title: "Success",
+      description: message,
+    });
     getAllDapil();
+    return;
   };
 
   const deleteDapil = async (id: string) => {

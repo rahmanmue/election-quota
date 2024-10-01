@@ -6,6 +6,8 @@ import { DapilType } from "@/services/dapilService";
 import { useEffect, useState } from "react";
 import { Label } from "@/components/ui/label";
 import { isEmptyObject } from "@/lib/commonUtils";
+import { useToast } from "@/hooks/use-toast";
+import { loadFromLocalStorage } from "@/lib/authUtils";
 
 interface ActionModalProps {
   title: string;
@@ -20,6 +22,7 @@ export const ActionModal = ({
   submitForm,
   initialData,
 }: ActionModalProps) => {
+  const { toast } = useToast();
   const [data, setData] = useState<DapilType>({
     daerah_pemilihan: "",
     kabupaten_kota: "",
@@ -62,12 +65,22 @@ export const ActionModal = ({
 
   const handleSubmit = () => {
     if (!isEmptyObject(data)) {
-      // alert(JSON.stringify(data));
+      const authState = loadFromLocalStorage();
+      data.user_id = authState.userId;
       submitForm(data, reset);
       return;
     }
 
-    alert("Gak Boleh Kosong Coy..");
+    toast({
+      title: "Uh oh! Something went wrong.",
+      description: "There was a problem with your request.",
+      variant: "destructive",
+    });
+
+    if (initialData) {
+      setData(initialData as DapilType);
+    }
+
     return;
   };
 

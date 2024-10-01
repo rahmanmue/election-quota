@@ -17,10 +17,12 @@ import UserService, { ResponseUser, UserType } from "@/services/userService";
 import { usePagination } from "@/hooks/usePagination";
 import { noTabel } from "@/lib/commonUtils";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
 
 const userService = new UserService();
 
 const Users = () => {
+  const { toast } = useToast();
   const { data, page, totalPages, pageSize, setPaginationData } =
     usePagination<UserType>();
 
@@ -34,9 +36,13 @@ const Users = () => {
   }, []);
 
   const onEditUser = async (data: UserType) => {
-    // alert(JSON.stringify(data));
-    await userService.updateUser(data);
+    const { message } = await userService.updateUser(data);
+    toast({
+      title: "Success",
+      description: message,
+    });
     getAllUser();
+    return;
   };
 
   const onDelete = async (id: string) => {

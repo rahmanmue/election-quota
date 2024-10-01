@@ -27,7 +27,7 @@ const Dashboard = () => {
     const rDapil = await dapilService.getAll(1, 1000);
     const rParpol = await parpolService.getAll(1, 100);
     const rUser = await userService.getAll(1, 100);
-    console.log(rDapil, rParpol, rUser);
+    // console.log(rDapil, rParpol, rUser);
 
     setData({
       tDapil: rDapil?.totalItems,
@@ -58,7 +58,7 @@ const Dashboard = () => {
           <CardHeader>
             <CardTitle>Daerah Pemilihan</CardTitle>
             <CardDescription>
-              Daerah Pemilihan Yang Ada di Indonesia.
+              Daerah Pemilihan Anda Yang Anda Masukan.
             </CardDescription>
           </CardHeader>
           <CardContent>

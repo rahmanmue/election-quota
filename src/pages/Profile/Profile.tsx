@@ -5,11 +5,13 @@ import { Button } from "@/components/ui/button";
 import ProfileService, { ProfileType } from "@/services/profileService";
 import UserService, { UserType } from "@/services/userService";
 import { useEffect, useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 const profileService = new ProfileService();
 const userService = new UserService();
 
 const Profile = () => {
+  const { toast } = useToast();
   const [dProfile, setDProfile] = useState<ProfileType>();
   const [dUser, setDUser] = useState<UserType>();
   const [file, setFile] = useState<File | null>(null);
@@ -44,7 +46,12 @@ const Profile = () => {
 
   const submitProfile = async () => {
     if (dProfile?.full_name == "") {
-      console.error("There is Empty Input Profile");
+      toast({
+        title: "Uh oh! Look Fullname.",
+        description: "Fullname is not Empty!.",
+        variant: "destructive",
+        duration: 2000,
+      });
       return;
     }
 
@@ -63,17 +70,31 @@ const Profile = () => {
       await profileService.updateProfile(dPost);
     }
 
+    toast({
+      title: "Success.",
+      description: "Data Updated!.",
+    });
     getProfile();
   };
 
-  const submitUser = async () => {
+  const submitUser = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     if (dUser?.email == "" || dUser?.name == "") {
-      console.error("email or name is empty");
+      toast({
+        title: "Uh oh! Email or Name.",
+        description: "Email or Name is not Empty!.",
+        variant: "destructive",
+        duration: 2000,
+      });
       return;
     }
 
     if (dUser?.password != dUser?.conf_password) {
-      console.error("password & conf_password doesnt match");
+      toast({
+        title: "Uh oh! They don't Match.",
+        description: "Password & Confirm Password not Match!.",
+        variant: "destructive",
+      });
       return;
     }
 
@@ -93,6 +114,10 @@ const Profile = () => {
 
     // alert(JSON.stringify(xy));
     await userService.updateUser(data as UserType);
+    toast({
+      title: "Success.",
+      description: "Data Updated!.",
+    });
     getUser();
   };
 
@@ -123,7 +148,7 @@ const Profile = () => {
         />
         <Button onClick={submitProfile}>Simpan Perubahan Profile</Button>
       </div>
-      <div className="flex flex-col gap-4 mt-5">
+      <form className="flex flex-col gap-4 mt-5" onSubmit={submitUser}>
         <Input
           type="role"
           className="uppercase"
@@ -160,8 +185,8 @@ const Profile = () => {
           name="password"
           onChange={handleChangeUser}
         />
-        <Button onClick={submitUser}>Simpan Perubahan Akun</Button>
-      </div>
+        <Button type="submit">Simpan Perubahan Akun</Button>
+      </form>
     </Layout>
   );
 };

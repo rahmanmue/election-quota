@@ -30,7 +30,6 @@ interface ResponseDapil {
 const DapilHasilSuara = () => {
   const { id } = useParams();
   const [dapil, sDapil] = useState<ResponseDapil[]>([]);
-  // const [infoDapil, sInfoDapil] = useState<DapilType>();
   const contentRef = useRef<HTMLDivElement>(null);
   const handlePrint = useReactToPrint({ contentRef });
 
@@ -46,7 +45,6 @@ const DapilHasilSuara = () => {
 
   const getDapilById = async () => {
     const { data } = await dapilService.getById(id!);
-    // sInfoDapil(data);
 
     sDapil([
       {
@@ -120,15 +118,6 @@ const DapilHasilSuara = () => {
             ))}
           </tbody>
         </table>
-
-        {/* <div className="my-5 w-full  ">
-          <Component
-            vote={data!}
-            tahun={infoDapil?.tahun as number}
-            dapil={infoDapil?.daerah_pemilihan as string}
-            provinsi={infoDapil?.provinsi as string}
-          />
-        </div> */}
 
         {data?.length != 0 ? (
           <>
