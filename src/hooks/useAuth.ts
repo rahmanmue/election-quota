@@ -40,7 +40,23 @@ export const useAuth = () => {
       const decoded = decodedToken(accessToken);
 
       dispatch(loginSuccess({ token: accessToken, userId: decoded.userId }));
-      navigate("/private");
+      navigate("/dashboard");
+    } catch (error: any) {
+      if (error.response && error.response.status === 400) {
+        throw new Error(error.response.data.message);
+      } else {
+        // Menangani kesalahan dengan lebih baik
+        console.error("Login failed", error);
+        throw new Error("Failed to login. Please check your credentials.");
+      }
+    }
+  };
+
+  const loginViaGoogle = (accessToken: string) => {
+    try {
+      const decoded = decodedToken(accessToken);
+      dispatch(loginSuccess({ token: accessToken, userId: decoded.userId }));
+      navigate("/dashboard");
     } catch (error) {
       // Menangani kesalahan dengan lebih baik
       console.error("Login failed", error);
@@ -55,9 +71,11 @@ export const useAuth = () => {
 
   const register = async (data: RegisterType) => {
     try {
-      const response = await authService.register(data);
-      console.log(response);
-      navigate("/login");
+      await authService.register(data);
+      navigate("/sign-in");
+      // setTimeout(() => {
+      //   navigate("/login");
+      // }, 3000);
     } catch (error: any) {
       if (error.response && error.response.status === 409) {
         throw new Error(error.response.data.message);
@@ -68,5 +86,5 @@ export const useAuth = () => {
     }
   };
 
-  return { ...auth, login, register, logoutUser };
+  return { ...auth, login, loginViaGoogle, register, logoutUser };
 };
