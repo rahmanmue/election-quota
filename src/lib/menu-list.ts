@@ -29,7 +29,7 @@ type Group = {
   menus: Menu[];
 };
 
-export function getMenuList(pathname: string): Group[] {
+export function getMenuListAdmin(pathname: string): Group[] {
   return [
     {
       groupLabel: "",
@@ -102,6 +102,47 @@ export function getMenuList(pathname: string): Group[] {
   ];
 }
 
+export function getMenuListUser(pathname: string): Group[] {
+  return [
+    {
+      groupLabel: "",
+      menus: [
+        {
+          href: "/dashboard",
+          label: "Dashboard",
+          active: pathname.includes("/dashboard"),
+          icon: LayoutGrid,
+          submenus: [],
+        },
+      ],
+    },
+    {
+      groupLabel: "Contents",
+      menus: [
+        {
+          href: "/daerah-pemilihan",
+          label: "Daerah pemilihan",
+          active: pathname.includes("/daerah-pemilihan"),
+          icon: Package,
+          submenus: [],
+        },
+      ],
+    },
+    {
+      groupLabel: "Settings",
+      menus: [
+        {
+          href: "/profile",
+          label: "Profile",
+          active: pathname.includes("/profile"),
+          icon: Settings,
+          submenus: [],
+        },
+      ],
+    },
+  ];
+}
+
 interface NavbarList {
   href: string;
   label: string;
@@ -113,11 +154,11 @@ export const navbarList: NavbarList[] = [
     label: "Home",
   },
   {
-    href: "/login",
-    label: "Login",
+    href: "/sign-in",
+    label: "Sign In",
   },
   {
-    href: "/register",
-    label: "Register",
+    href: "/sign-up",
+    label: "Sign Up",
   },
 ];
