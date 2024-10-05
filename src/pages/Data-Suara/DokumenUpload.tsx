@@ -57,6 +57,31 @@ export const DokumenUpload = ({ onUpload }: DokumenUploadProps) => {
     setOpen(!open);
   };
 
+  const downloadParpolFile = async () => {
+    try {
+      // Panggil fungsi downloadParpol
+      const [blobData] = await parpolService.downloadParpol();
+
+      // Buat URL untuk blob yang diunduh
+      const blob = new Blob([blobData], { type: "application/octet-stream" });
+      const blobURL = window.URL.createObjectURL(blob);
+
+      // Buat link yang tidak terlihat untuk memicu download
+      const link = document.createElement("a");
+      link.href = blobURL;
+      link.setAttribute("download", "parpol-data.xlsx"); // Nama file yang diunduh
+
+      // Tambahkan link ke DOM dan klik secara otomatis untuk mendownload file
+      document.body.appendChild(link);
+      link.click();
+
+      // Hapus link setelah file diunduh
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error("Error downloading file", error);
+    }
+  };
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -70,13 +95,13 @@ export const DokumenUpload = ({ onUpload }: DokumenUploadProps) => {
           <DialogTitle>Upload Dokumen</DialogTitle>
           <DialogDescription>
             Download template
-            <a
-              href={parpolService.downloadDokumen()}
-              className="text-primary underline"
+            <span
+              onClick={downloadParpolFile}
+              className="text-primary underline cursor-pointer"
             >
               {" "}
               dokumen ini{" "}
-            </a>
+            </span>
             lalu upload kembali dengan data yang sudah terisi.
           </DialogDescription>
         </DialogHeader>
