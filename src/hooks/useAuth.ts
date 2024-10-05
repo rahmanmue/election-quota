@@ -73,9 +73,6 @@ export const useAuth = () => {
     try {
       await authService.register(data);
       navigate("/sign-in");
-      // setTimeout(() => {
-      //   navigate("/login");
-      // }, 3000);
     } catch (error: any) {
       if (error.response && error.response.status === 409) {
         throw new Error(error.response.data.message);
