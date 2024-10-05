@@ -28,6 +28,6 @@ export default class ProfileService {
   }
 
   getAvatar(avatar: string) {
-    return `/api/avatar/${avatar}`;
+    return `${import.meta.env.VITE_API_URL}/avatar/${avatar}`;
   }
 }

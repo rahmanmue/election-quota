@@ -3,7 +3,7 @@ import { decodedToken, saveToLocalStorage } from "@/lib/authUtils";
 
 // Buat instance axios
 const axiosInstance = axios.create({
-  baseURL: "/api",
+  baseURL: import.meta.env.VITE_API_URL,
   headers: {
     "Content-Type": "application/json",
   },
@@ -21,7 +21,7 @@ axiosInstance.interceptors.response.use(
 
       try {
         // Panggil API refresh-token tanpa menggunakan authService langsung
-        const { data } = await axios.post("/api/auth/refresh-token");
+        const { data } = await axios.post("/auth/refresh-token");
         const { accessToken } = data;
         const decode = decodedToken(accessToken);
 

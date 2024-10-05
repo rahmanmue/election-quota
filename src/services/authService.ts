@@ -33,12 +33,7 @@ export default class AuthService {
     return response.data;
   }
 
-  async refreshToken(): Promise<Token> {
-    const response = await axiosInstance.post("/auth/refresh-token");
-    return response.data;
-  }
-
   googleLogin() {
-    return "/api/google";
+    return `${import.meta.env.VITE_API_URL}/google`;
   }
 }

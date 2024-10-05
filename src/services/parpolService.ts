@@ -57,7 +57,7 @@ export default class ParpolService {
   }
 
   downloadDokumen() {
-    return "/api/download-parpol";
+    return "/download-parpol";
   }
 
   // tidak kepakai
