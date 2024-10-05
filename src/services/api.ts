@@ -21,7 +21,9 @@ axiosInstance.interceptors.response.use(
 
       try {
         // Panggil API refresh-token tanpa menggunakan authService langsung
-        const { data } = await axios.post("/auth/refresh-token");
+        const { data } = await axios.post("/auth/refresh-token", {
+          withCredentials: true,
+        });
         const { accessToken } = data;
         const decode = decodedToken(accessToken);
 
