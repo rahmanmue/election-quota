@@ -11,8 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/hooks/useAuth";
 import Navbar from "@/components/landing-page/Navbar";
-import { Link, useNavigate } from "react-router-dom";
-import { RegisterType } from "@/services/authService";
+import { Link, Navigate } from "react-router-dom";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -69,7 +68,6 @@ const formSchema = z
 
 const Register: React.FC = () => {
   const { toast } = useToast();
-  const navigate = useNavigate();
   const { register, isAuthenticated } = useAuth();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -106,9 +104,9 @@ const Register: React.FC = () => {
     }
   };
 
-  // if (isAuthenticated) {
-  //   navigate("/dashboard");
-  // }
+  if (isAuthenticated) {
+    return <Navigate to="/dashboard" />;
+  }
   return (
     <>
       <Navbar />
