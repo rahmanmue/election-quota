@@ -18,6 +18,7 @@ const Profile = () => {
 
   const getProfile = async () => {
     const { data } = await profileService.getProfile();
+    console.log(data);
     setDProfile(data);
   };
 
@@ -67,7 +68,7 @@ const Profile = () => {
       dPost.append("full_name", dProfile?.full_name as string);
       dPost.append("avatar", file);
 
-      await profileService.updateProfile(dPost);
+      await profileService.updateProfileFirebase(dPost);
     }
 
     toast({
@@ -127,7 +128,7 @@ const Profile = () => {
         <AvatarImage
           src={
             dProfile?.avatar
-              ? profileService.getAvatar(dProfile.avatar as string)
+              ? (dProfile.avatar as string)
               : "https://github.com/shadcn.png"
           }
           alt="@shadcn"

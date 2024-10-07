@@ -27,6 +27,19 @@ export default class ProfileService {
     return response.data;
   }
 
+  async updateProfileFirebase(formData: FormData) {
+    const response = await axiosInstance.put(
+      "/update-profile-firebase",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  }
+
   getAvatar(avatar: string) {
     return `${import.meta.env.VITE_API_URL}/avatar/${avatar}`;
   }
