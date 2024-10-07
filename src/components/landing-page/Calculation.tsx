@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { SelectDemo } from "../Select";
 import { Button } from "../ui/button";
 import { ComponentBarChart } from "@/components/BarChart";
@@ -30,14 +30,7 @@ const Calculation = () => {
 
   const getAllDapil = async () => {
     const { data } = await dapilService.allDapil();
-    const newData = data?.map((d: any) => {
-      return {
-        value: d.id,
-        item: `[${d.provinsi}]-[${d.kabupaten_kota}]-[${d.daerah_pemilihan}]-[${d.tahun}]`,
-      };
-    });
-
-    setDataSelect(newData);
+    setDataSelect(data);
   };
 
   const {
@@ -62,13 +55,17 @@ const Calculation = () => {
 
   useEffect(() => {
     getAllDapil();
-    // console.log(data);
   }, []);
 
   const handleSearch = () => {
     getCalculation(idDapil);
-    // console.log(data);
   };
+
+  // Memoize the dataSelect to prevent unnecessary re-render when unchanged
+  const memoizedDataSelect = useMemo(() => dataSelect, [dataSelect]);
+
+  // Memoize the data from calculation results to optimize rendering
+  const memoizedCalculationData = useMemo(() => data, [data]);
 
   return (
     <section id="calculation" className="container bg-muted/50 h-max py-10">
@@ -84,7 +81,7 @@ const Calculation = () => {
           <div className="md:w-1/2">
             <SelectDemo
               placeholder="[Provinsi]-[Kab/Kota]-[Daerah Pemilihan]-[Tahun]"
-              select={dataSelect}
+              select={memoizedDataSelect}
               onChange={handleSelectChange}
             />
           </div>
@@ -119,7 +116,7 @@ const Calculation = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {data?.map((item, i) => (
+              {memoizedCalculationData?.map((item, i) => (
                 <TableRow key={i}>
                   <TableCell>{item.namaParpol}</TableCell>
                   <TableCell>{item.suaraSah}</TableCell>
