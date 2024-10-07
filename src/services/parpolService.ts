@@ -60,7 +60,6 @@ export default class ParpolService {
     return "/download-parpol";
   }
 
-  // tidak kepakai
   async downloadParpol() {
     const response = await axiosInstance.get("/download-parpol", {
       responseType: "blob",
