@@ -49,4 +49,22 @@ export default class ParpolVoteService {
       throw error;
     }
   }
+
+  async uploadDocumentTemp(formData: FormData) {
+    try {
+      const response = await axiosInstance.post(
+        "/import-excel-temporary",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error uploading document:", error);
+      throw error;
+    }
+  }
 }

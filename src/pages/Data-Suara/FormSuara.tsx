@@ -88,7 +88,7 @@ const FormSuara = () => {
   };
 
   const uploadDoc = async (formData: FormData) => {
-    await parpolVoteService.uploadDocument(formData);
+    await parpolVoteService.uploadDocumentTemp(formData);
     toast({
       title: "Success",
       description: "Data Success Created",
