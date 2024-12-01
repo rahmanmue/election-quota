@@ -132,15 +132,16 @@ const Register: React.FC = () => {
                       name="name"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>name</FormLabel>
+                          <FormLabel htmlFor="name">name</FormLabel>
                           <FormControl>
                             <Input
                               placeholder="Masukan Username"
                               type="text"
+                              id="name"
                               {...field}
                             />
                           </FormControl>
-                          <FormMessage />
+                          <FormMessage data-testid="name-error" />
                         </FormItem>
                       )}
                     />
@@ -149,15 +150,16 @@ const Register: React.FC = () => {
                       name="email"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>email</FormLabel>
+                          <FormLabel htmlFor="email">email</FormLabel>
                           <FormControl>
                             <Input
                               placeholder="Masukan Email"
                               type="email"
+                              id="email"
                               {...field}
                             />
                           </FormControl>
-                          <FormMessage />
+                          <FormMessage data-testid="email-error" />
                         </FormItem>
                       )}
                     />
@@ -166,12 +168,14 @@ const Register: React.FC = () => {
                       name="password"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Password</FormLabel>
+                          <FormLabel htmlFor="password">Password</FormLabel>
                           <FormControl>
                             <div className="relative">
                               <Input
                                 placeholder="Masukan Password"
                                 type={showPassword ? "text" : "password"}
+                                id="password"
+                                aria-label="password"
                                 {...field}
                               />
                               <span
@@ -186,7 +190,7 @@ const Register: React.FC = () => {
                               </span>
                             </div>
                           </FormControl>
-                          <FormMessage />
+                          <FormMessage data-testid="password-error" />
                         </FormItem>
                       )}
                     />
@@ -195,12 +199,14 @@ const Register: React.FC = () => {
                       name="confPassword"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Confirm Password</FormLabel>
+                          <FormLabel htmlFor="confPassword">Confirm Password</FormLabel>
                           <FormControl>
                             <div className="relative">
                               <Input
                                 placeholder="Masukan Confirm Password"
                                 type={showConfirmPassword ? "text" : "password"}
+                                id="confPassword"
+                                aria-label="confPassword"
                                 {...field}
                               />
                               <span
@@ -215,14 +221,14 @@ const Register: React.FC = () => {
                               </span>
                             </div>
                           </FormControl>
-                          <FormMessage />
+                          <FormMessage data-testid="confPassword-error"/>
                         </FormItem>
                       )}
                     />
                   </div>
                 </CardContent>
                 <CardFooter>
-                  <Button className="w-full" type="submit">
+                  <Button className="w-full" type="submit" data-testid="button-register">
                     Sign Up
                   </Button>
                 </CardFooter>

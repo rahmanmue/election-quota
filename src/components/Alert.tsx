@@ -20,7 +20,7 @@ export const Alert = ({ onDelete }: AlertProps) => {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="ghost">
+        <Button variant="ghost" data-testid="alert-trigger">
           <Trash />
         </Button>
       </AlertDialogTrigger>

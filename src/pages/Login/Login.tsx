@@ -115,15 +115,16 @@ const Login: React.FC = () => {
                       name="email"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>email</FormLabel>
+                          <FormLabel htmlFor="email">email</FormLabel>
                           <FormControl>
                             <Input
                               placeholder="Masukan Email"
                               type="email"
+                              id="email"
                               {...field}
                             />
                           </FormControl>
-                          <FormMessage />
+                          <FormMessage  data-testid="email-error" />
                         </FormItem>
                       )}
                     />
@@ -132,17 +133,19 @@ const Login: React.FC = () => {
                       name="password"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Password</FormLabel>
+                          <FormLabel htmlFor="password">Password</FormLabel>
                           <FormControl>
                             <div className="relative">
                               <Input
                                 placeholder="Masukan Password"
                                 type={showPassword ? "text" : "password"}
+                                id="password"
                                 {...field}
                               />
                               <span
                                 className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
                                 onClick={togglePasswordVisibility}
+                                data-testid="button-eye"
                               >
                                 {showPassword ? (
                                   <EyeOff className="h-5 w-5" />
@@ -152,7 +155,7 @@ const Login: React.FC = () => {
                               </span>
                             </div>
                           </FormControl>
-                          <FormMessage />
+                          <FormMessage  data-testid="password-error" />
                         </FormItem>
                       )}
                     />
@@ -160,7 +163,7 @@ const Login: React.FC = () => {
                 </CardContent>
                 <CardFooter>
                   <div className="flex flex-col gap-2 w-full">
-                    <Button className="w-full" type="submit">
+                    <Button className="w-full" type="submit" data-testid = "button-sigin">
                       Sign In
                     </Button>
                     {/* <Button onClick={handleSubmitTest}>Login Test</Button> */}
@@ -172,6 +175,7 @@ const Login: React.FC = () => {
                   variant={"outline"}
                   onClick={handleGoogleLogin}
                   className="flex items-center gap-3 w-full -mt-3"
+                  data-testid = "button-sigin-google"
                 >
                   <img src={google} alt="google-icon" className="w-5" />
                   Sign In With Google

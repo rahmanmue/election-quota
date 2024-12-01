@@ -10,6 +10,7 @@ interface SearchProps {
 export const Search = ({ placeholder, onSearch }: SearchProps) => {
   const [search, setSearch] = useState<string>("");
   const handleSearch = () => {
+    if (search.trim() === "") return;
     onSearch(search);
     setSearch("");
   };
