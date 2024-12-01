@@ -1,0 +1,27 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Home Component > matches the snapshot 1`] = `
+<DocumentFragment>
+  <div>
+    Navbar Component
+  </div>
+  <div>
+    Hero Component
+  </div>
+  <div>
+    Calculation Component
+  </div>
+  <div>
+    About Component
+  </div>
+  <div>
+    Footer Component
+  </div>
+  <div>
+    ScrollToTop Component
+  </div>
+  <div
+    class="shadow-hero"
+  />
+</DocumentFragment>
+`;
