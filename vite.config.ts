@@ -14,18 +14,18 @@ export default defineConfig(({ mode }) => {
       },
     },
     // Use the env variable here
-    server: {
-      proxy:
-        mode == "development"
-          ? {
-              "/api": {
-                target: env.VITE_API_URL,
-                changeOrigin: true,
-                secure: false,
-                rewrite: (path) => path.replace(/^\/api/, ""),
-              },
-            }
-          : undefined,
-    },
+    // server: {
+    //   proxy:
+    //     mode == "development"
+    //       ? {
+    //           "/api": {
+    //             target: env.VITE_API_URL,
+    //             changeOrigin: true,
+    //             secure: false,
+    //             rewrite: (path) => path.replace(/^\/api/, ""),
+    //           },
+    //         }
+    //       : undefined,
+    // },
   };
 });
